@@ -587,7 +587,7 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function sendReply() {
+function sendReply() {
   const text = userMessage.value.trim();
   if (!text) {
     userMessage.placeholder = "jangan kosong dong 😢 tulis sesuatu...";
@@ -602,24 +602,14 @@
   addMessage(text, true);
   userMessage.value = '';
   
-  // ✅ HAPUS SPASI DI SINI! (INI PENYEBAB ERROR DI HP)
-  const encoded = encodeURIComponent(`Hai damian\n\nAku mau ngomong sesuatu "${text}"`);
-  const whatsappUrl = `https://wa.me/6285191240359?text=${encoded}`;
+  // GANTI DENGAN NOMOR WA-MU YANG VALID (12 DIGIT SETELAH 62)
+  const phoneNumber = "628123456789"; 
+  const message = `Hai damian\n\nAku mau ngomong sesuatu "${text}"`;
+  const encoded = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encoded}`;
   
-  // ✅ SOLUSI HP: COBA POPUP → FALBACK KE REDIRECT
-  try {
-    const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-      throw new Error('Popup blocked');
-    }
-    // Tambah pesan sukses setelah 1 detik
-    setTimeout(() => {
-      addMessage("💌 pesan kamu udah terkirim ke WA aku!", false);
-    }, 1000);
-  } catch (e) {
-    // Redirect penuh jika popup gagal (umum di HP)
-    window.location.href = whatsappUrl;
-  }
+  // SOLUSI PALING AMPUH UNTUK HP
+  window.location.href = whatsappUrl;
 }
 
     sendBtn.addEventListener('click', sendReply);
