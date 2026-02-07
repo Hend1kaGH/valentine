@@ -588,26 +588,39 @@
     }
 
     function sendReply() {
-      const text = userMessage.value.trim();
-      if (!text) {
-        userMessage.placeholder = "jangan kosong dong 😢 tulis sesuatu...";
-        userMessage.style.borderColor = 'var(--accent)';
-        setTimeout(() => {
-          userMessage.style.borderColor = 'var(--secondary)';
-          userMessage.placeholder = "tulis sesuatu yang manis...";
-        }, 2000);
-        return;
-      }
+  const text = userMessage.value.trim();
+  if (!text) {
+    userMessage.placeholder = "jangan kosong dong 😢 tulis sesuatu...";
+    userMessage.style.borderColor = 'var(--accent)';
+    setTimeout(() => {
+      userMessage.style.borderColor = 'var(--secondary)';
+      userMessage.placeholder = "tulis sesuatu yang manis...";
+    }, 2000);
+    return;
+  }
 
-      addMessage(text, true);
-      userMessage.value = '';
-      
-      const encoded = encodeURIComponent(`Hai damian\n\nAku mau ngomong sesuatu "${text}"`);
-      setTimeout(() => {
-        window.open(`https://wa.me/6285191240359?text=${encoded}`, '_blank');
-        addMessage("💌 pesan kamu udah terkirim ke WA aku!", false);
-      }, 800);
+  addMessage(text, true);
+  userMessage.value = '';
+  
+  // ✅ HAPUS SPASI DI SINI! (INI PENYEBAB ERROR DI HP)
+  const encoded = encodeURIComponent(`Hai damian\n\nAku mau ngomong sesuatu "${text}"`);
+  const whatsappUrl = `https://wa.me/6285191240359?text=${encoded}`;
+  
+  // ✅ SOLUSI HP: COBA POPUP → FALBACK KE REDIRECT
+  try {
+    const newWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      throw new Error('Popup blocked');
     }
+    // Tambah pesan sukses setelah 1 detik
+    setTimeout(() => {
+      addMessage("💌 pesan kamu udah terkirim ke WA aku!", false);
+    }, 1000);
+  } catch (e) {
+    // Redirect penuh jika popup gagal (umum di HP)
+    window.location.href = whatsappUrl;
+  }
+}
 
     sendBtn.addEventListener('click', sendReply);
     userMessage.addEventListener('keypress', (e) => {
