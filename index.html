@@ -24,7 +24,6 @@
     body {
       font-family: 'Poppins', system-ui, sans-serif;
       min-height: 100vh;
-      /* HAPUS overflow: hidden — biar scroll work di HP */
       background: linear-gradient(135deg, #fff5f7, #ffe6ee);
       color: var(--text-dark);
       position: relative;
@@ -584,11 +583,10 @@
       addMessage(text, true);
       userMessage.value = '';
       
-      // 🔥 NOMOR SESUAI YANG KAMU PAKAI — SUDAH VALID DI WA.ME
+      // 🔥 NOMOR SESUAI YANG KAMU PAKAI
       const phoneNumber = "6285191240359";
       const message = `Hai Damian,\n\n${text.trim()}`;
       const encoded = encodeURIComponent(message);
-      // ✅ SOLUSI PALING WORK DI HP
       window.location.href = `https://wa.me/${phoneNumber}?text=${encoded}`;
     }
 
