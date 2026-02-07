@@ -24,7 +24,7 @@
     body {
       font-family: 'Poppins', system-ui, sans-serif;
       min-height: 100vh;
-      /* HAPUS overflow: hidden */
+      /* HAPUS overflow: hidden — biar scroll work di HP */
       background: linear-gradient(135deg, #fff5f7, #ffe6ee);
       color: var(--text-dark);
       position: relative;
@@ -349,40 +349,6 @@
       transform: translateX(2px);
     }
 
-    /* ✅ TOMBOL MENGAMBANG UNTUK MOBILE (TAMBAHAN SAJA) */
-    .mobile-float-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 20px;
-      box-shadow: var(--shadow);
-      z-index: 100;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      /* Default hidden */
-      display: none;
-    }
-
-    .mobile-float-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
-    }
-
-    /* Muncul hanya di mobile */
-    @media (max-width: 768px) {
-      .mobile-float-btn {
-        display: flex;
-      }
-    }
-
     @media (max-width: 600px) {
       .gift-box { width: 180px; height: 180px; }
       .gift-box::after { font-size: 60px; }
@@ -425,11 +391,6 @@
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
-  </div>
-
-  <!-- ✅ TOMBOL TAMBAHAN UNTUK MOBILE -->
-  <div class="mobile-float-btn" id="mobileFloatBtn">
-    <i class="fas fa-paper-plane"></i>
   </div>
 
   <!-- Audio -->
@@ -498,7 +459,6 @@
     const musicToggle = document.getElementById('musicToggle');
     const sendBtn = document.getElementById('sendBtn');
     const userMessage = document.getElementById('userMessage');
-    const mobileFloatBtn = document.getElementById('mobileFloatBtn');
 
     let msgIndex = 0;
     let isPlaying = false;
@@ -608,7 +568,7 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // ✅ FUNGSI BALAS UTAMA (WORK DI SEMUA DEVICE)
+    // ✅ FUNGSI BALAS UTAMA — WORK DI SEMUA DEVICE
     function sendReply() {
       const text = userMessage.value.trim();
       if (!text) {
@@ -624,7 +584,7 @@
       addMessage(text, true);
       userMessage.value = '';
       
-      // 🔥 NOMOR SESUAI YANG KAMU PAKAI
+      // 🔥 NOMOR SESUAI YANG KAMU PAKAI — SUDAH VALID DI WA.ME
       const phoneNumber = "6285191240359";
       const message = `Hai Damian,\n\n${text.trim()}`;
       const encoded = encodeURIComponent(message);
@@ -638,17 +598,6 @@
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendReply();
-      }
-    });
-
-    // ✅ TOMBOL MOBILE (ALTERNATIF)
-    mobileFloatBtn.addEventListener('click', () => {
-      const text = prompt("Balas untuk Damian:", "");
-      if (text && text.trim()) {
-        const phoneNumber = "6285191240359";
-        const message = `Hai Damian,\n\n${text.trim()}`;
-        const encoded = encodeURIComponent(message);
-        window.location.href = `https://wa.me/${phoneNumber}?text=${encoded}`;
       }
     });
 
