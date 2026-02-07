@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Spesial untuk mu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
@@ -24,10 +24,11 @@
     body {
       font-family: 'Poppins', system-ui, sans-serif;
       min-height: 100vh;
-      overflow: hidden;
+      /* HAPUS overflow: hidden */
       background: linear-gradient(135deg, #fff5f7, #ffe6ee);
       color: var(--text-dark);
       position: relative;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     #particles-js {
@@ -220,7 +221,9 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffb3c6" fill-opacity="0.05" d="M0,0 L100,0 L100,100 L0,100 Z"/></svg>');
+      background: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ffb3c6" fill-opacity="0.05" d="M0,0 L100,0 L100,100 L0,100 Z"/></svg>');
+      min-height: 0;
+      max-height: calc(100vh - 140px);
     }
 
     .message {
@@ -250,7 +253,6 @@
       box-shadow: 0 4px 16px rgba(255, 107, 157, 0.3);
     }
 
-    /* ✅ TYPING INDICATOR (UNTUK SEMUA PESAN) */
     .typing-indicator {
       align-self: flex-start;
       background: white;
@@ -337,7 +339,6 @@
       transform: scale(0.95);
     }
 
-    /* ✅ ICON KIRIM MENGHADAP KE KANAN! */
     .send-btn i {
       font-size: 18px;
       transform: rotate(0deg);
@@ -346,6 +347,40 @@
 
     .send-btn:hover i {
       transform: translateX(2px);
+    }
+
+    /* ✅ TOMBOL MENGAMBANG UNTUK MOBILE (TAMBAHAN SAJA) */
+    .mobile-float-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      box-shadow: var(--shadow);
+      z-index: 100;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      /* Default hidden */
+      display: none;
+    }
+
+    .mobile-float-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+    }
+
+    /* Muncul hanya di mobile */
+    @media (max-width: 768px) {
+      .mobile-float-btn {
+        display: flex;
+      }
     }
 
     @media (max-width: 600px) {
@@ -392,6 +427,11 @@
     </div>
   </div>
 
+  <!-- ✅ TOMBOL TAMBAHAN UNTUK MOBILE -->
+  <div class="mobile-float-btn" id="mobileFloatBtn">
+    <i class="fas fa-paper-plane"></i>
+  </div>
+
   <!-- Audio -->
   <audio id="bgMusic" loop>
     <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-sunset-687.mp3" type="audio/mpeg">
@@ -400,44 +440,45 @@
     <source src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-click-2649.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Particles.js -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
-    // Particles config
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 60, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff6b9d" },
-        shape: { type: "circle" },
-        opacity: { value: 0.3, random: true },
-        size: { value: 2, random: true },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ffb3c6",
-          opacity: 0.2,
-          width: 1
+    // Particles hanya di desktop
+    if (window.innerWidth > 768) {
+      particlesJS('particles-js', {
+        particles: {
+          number: { value: 60, density: { enable: true, value_area: 800 } },
+          color: { value: "#ff6b9d" },
+          shape: { type: "circle" },
+          opacity: { value: 0.3, random: true },
+          size: { value: 2, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffb3c6",
+            opacity: 0.2,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 1.5,
+            direction: "none",
+            random: false,
+            straight: false,
+            out_mode: "out",
+            bounce: false
+          }
         },
-        move: {
-          enable: true,
-          speed: 1.5,
-          direction: "none",
-          random: false,
-          straight: false,
-          out_mode: "out",
-          bounce: false
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        }
-      },
-      retina_detect: true
-    });
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "grab" },
+            onclick: { enable: true, mode: "push" },
+            resize: true
+          }
+        },
+        retina_detect: true
+      });
+    }
 
     const messages = [
       "hei kamu...",
@@ -457,6 +498,7 @@
     const musicToggle = document.getElementById('musicToggle');
     const sendBtn = document.getElementById('sendBtn');
     const userMessage = document.getElementById('userMessage');
+    const mobileFloatBtn = document.getElementById('mobileFloatBtn');
 
     let msgIndex = 0;
     let isPlaying = false;
@@ -497,56 +539,40 @@
       showNextMessage();
     });
 
-    // ✅ FUNGSI UTAMA: TAMPILKAN PESAN DENGAN EFEK TYPING
     function showNextMessage() {
       if (msgIndex >= messages.length) {
-        // Pesan terakhir setelah semua selesai
         showTypingIndicator();
         setTimeout(() => {
           hideTypingIndicator();
-          addMessage("klik tombol pesawat buat balas aku ya... nanti langsung ke WA aku 💬💕", false);
+          addMessage("Klik tombol pesawat untuk balas aku ya 💬💕", false);
         }, 2200);
         return;
       }
 
-      // Tampilkan typing indicator dulu
       showTypingIndicator();
-      
-      // Delay acak sebelum mulai mengetik
       const thinkingDelay = 800 + Math.random() * 1000;
       setTimeout(() => {
         hideTypingIndicator();
-        
-        // Buat elemen pesan kosong
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message from-other';
-        msgDiv.textContent = ''; // Mulai dari kosong
+        msgDiv.textContent = '';
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        
-        // Ketik karakter per karakter
         typeText(messages[msgIndex], msgDiv, () => {
           msgIndex++;
-          // Delay sebelum pesan berikutnya
           setTimeout(showNextMessage, 500);
         });
       }, thinkingDelay);
     }
 
-    // ✅ TAMPILKAN TYPING INDICATOR
     function showTypingIndicator() {
       currentTypingIndicator = document.createElement('div');
       currentTypingIndicator.className = 'typing-indicator';
-      currentTypingIndicator.innerHTML = `
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      `;
+      currentTypingIndicator.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
       chatMessages.appendChild(currentTypingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // ✅ SEMBUNYIKAN TYPING INDICATOR
     function hideTypingIndicator() {
       if (currentTypingIndicator) {
         currentTypingIndicator.remove();
@@ -554,11 +580,9 @@
       }
     }
 
-    // ✅ FUNGSI MENGETIK PER KARAKTER
     function typeText(text, element, callback) {
       let i = 0;
-      const speed = 30 + Math.random() * 40; // Kecepatan acak (30-70ms)
-      
+      const speed = 30 + Math.random() * 40;
       function type() {
         if (i < text.length) {
           element.textContent += text.charAt(i);
@@ -566,20 +590,17 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
           setTimeout(type, speed);
         } else {
-          // Mainkan suara saat selesai mengetik
           popSound.volume = 0.3;
           popSound.play().catch(() => {});
           if (callback) callback();
         }
       }
-      
       type();
     }
 
     function addMessage(text, isUser = false) {
       popSound.volume = 0.3;
       popSound.play();
-      
       const msgDiv = document.createElement('div');
       msgDiv.className = `message ${isUser ? 'from-user' : 'from-other'}`;
       msgDiv.textContent = text;
@@ -587,31 +608,31 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-function sendReply() {
-  const text = userMessage.value.trim();
-  if (!text) {
-    userMessage.placeholder = "jangan kosong dong 😢 tulis sesuatu...";
-    userMessage.style.borderColor = 'var(--accent)';
-    setTimeout(() => {
-      userMessage.style.borderColor = 'var(--secondary)';
-      userMessage.placeholder = "tulis sesuatu yang manis...";
-    }, 2000);
-    return;
-  }
+    // ✅ FUNGSI BALAS UTAMA (WORK DI SEMUA DEVICE)
+    function sendReply() {
+      const text = userMessage.value.trim();
+      if (!text) {
+        userMessage.placeholder = "jangan kosong dong 😢 tulis sesuatu...";
+        userMessage.style.borderColor = 'var(--accent)';
+        setTimeout(() => {
+          userMessage.style.borderColor = 'var(--secondary)';
+          userMessage.placeholder = "tulis sesuatu yang manis...";
+        }, 2000);
+        return;
+      }
 
-  addMessage(text, true);
-  userMessage.value = '';
-  
-  // GANTI DENGAN NOMOR WA-MU YANG VALID (12 DIGIT SETELAH 62)
-  const phoneNumber = "628123456789"; 
-  const message = `Hai damian\n\nAku mau ngomong sesuatu "${text}"`;
-  const encoded = encodeURIComponent(message);
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encoded}`;
-  
-  // SOLUSI PALING AMPUH UNTUK HP
-  window.location.href = whatsappUrl;
-}
+      addMessage(text, true);
+      userMessage.value = '';
+      
+      // 🔥 NOMOR SESUAI YANG KAMU PAKAI
+      const phoneNumber = "6285191240359";
+      const message = `Hai Damian,\n\n${text.trim()}`;
+      const encoded = encodeURIComponent(message);
+      // ✅ SOLUSI PALING WORK DI HP
+      window.location.href = `https://wa.me/${phoneNumber}?text=${encoded}`;
+    }
 
+    // Event listeners
     sendBtn.addEventListener('click', sendReply);
     userMessage.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -620,7 +641,16 @@ function sendReply() {
       }
     });
 
-    if (window.innerWidth > 768) userMessage.focus();
+    // ✅ TOMBOL MOBILE (ALTERNATIF)
+    mobileFloatBtn.addEventListener('click', () => {
+      const text = prompt("Balas untuk Damian:", "");
+      if (text && text.trim()) {
+        const phoneNumber = "6285191240359";
+        const message = `Hai Damian,\n\n${text.trim()}`;
+        const encoded = encodeURIComponent(message);
+        window.location.href = `https://wa.me/${phoneNumber}?text=${encoded}`;
+      }
+    });
 
     if (window.location.hash === '#chat') {
       pageGift.style.display = 'none';
